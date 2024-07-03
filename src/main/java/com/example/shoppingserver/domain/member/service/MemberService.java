@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
 public class MemberService {
 
@@ -34,19 +33,22 @@ public class MemberService {
                         MemberCodes.INCORRECT_MEMBER_INFO.getMessage()));
 
         if(isMatchPassword(loginRequest.getPassword(), member.getPassword())) {
+            System.out.println("test successful");
             return new LoginResponse(jwtProviders.createToken(loginRequest.getEmail(), member.getMemberId()));
         } else {
-           throw new MyException(
+            System.out.println("test error");
+
+            throw new MyException(
                     MemberCodes.INCORRECT_MEMBER_INFO.getCode(),
                     MemberCodes.INCORRECT_MEMBER_INFO.getMessage());
         }
     }
 
     @Transactional
-    public void signUp(MemberRequest memberRequest) {
+    public MemberResponse signUp(MemberRequest memberRequest) {
         isExistEmail(memberRequest.getEmail());
         memberRequest.setPassword(passwordEncoder.encode(memberRequest.getPassword()));
-        memberRepository.save(Member.createMember(memberRequest));
+        return MemberResponse.createMemberResponse(memberRepository.save(Member.createMember(memberRequest)));
     }
 
     @Transactional

@@ -12,6 +12,8 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+  main:
+    allow-bean-definition-overriding: true
 ---
 spring:
 jpa:

@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableJpaAuditing
-@EnableJpaRepositories(basePackages = {"com.example.shoppingserver"})
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = {"com.example.shoppingserver"})
 public class ShoppingServerApplication {
 
     public static void main(String[] args) {

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class MemberRequest {
