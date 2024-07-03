@@ -26,7 +26,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         response.setCharacterEncoding("utf-8");
 
         try {
-
+            filterChain.doFilter(request, response);
         } catch (JwtException e) {
             setErrorResponse(HttpStatus.UNAUTHORIZED, response, e);
         }

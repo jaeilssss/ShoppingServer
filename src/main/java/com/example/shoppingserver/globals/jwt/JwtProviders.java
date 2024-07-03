@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtProviders implements InitializingBean {
     @Value("${jwt.headers}")
-    public static String AUTHORITIES_KEY;
+    public static String AUTHORITIES_KEY ;
     private final String secretKey;
     private final long expirationTime;
     private Key key;
@@ -43,15 +43,16 @@ public class JwtProviders implements InitializingBean {
     public String createToken(String email, Long userId) {
         Claims claims = Jwts.claims();
 
-        claims.put(AUTHORITIES_KEY, email);
+        claims.put(AUTHORITIES_KEY,email);
 
-        Long now = new Date().getTime();
+        long now = new Date().getTime();
         Date validity = new Date(now + this.expirationTime);
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(validity)
+                .setSubject(email)
                 .claim("userId",userId)
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
@@ -62,14 +63,15 @@ public class JwtProviders implements InitializingBean {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException |
-                MalformedJwtException e) {
-            log.error("Invalid Jwt Token");
+                 MalformedJwtException e) {
+            log.info("Invalid JWT token", e);
         } catch (ExpiredJwtException e) {
-            log.error("Expired JWT Token", e);
+            log.info("Expired JWT token", e);
+            throw new JwtException("error");
         } catch (UnsupportedJwtException e) {
-            log.error("Unsupported JWT Token", e);
+            log.info("Unsupported JWT token", e);
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty",  e);
+            log.info("JWT claims string is empty", e);
         }
         return false;
     }
@@ -86,15 +88,25 @@ public class JwtProviders implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
+        // UserDetails principal = new
         return new UsernamePasswordAuthenticationToken(claims.get("userId"), "", authorities);
+    }
+
+    public boolean checkTokenAndUserId(String accessToken, String userID) {
+        Claims claims = parseClaims(accessToken);
+        return claims.get("userId").equals(userID);
     }
 
     private Claims parseClaims(String token) {
         try {
-
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }
-
 }
+
