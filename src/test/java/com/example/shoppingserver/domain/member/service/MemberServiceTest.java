@@ -41,7 +41,6 @@ class MemberServiceTest {
         MemberResponse memberResponse = memberService.signUp(memberRequest);
 
         //then
-
         assertEquals(memberRequest.getEmail(), memberResponse.getEmail(), memberResponse.getEmail());
         assertEquals(memberRequest.getName(), memberResponse.getName(), memberResponse.getName());
         assertEquals(memberRequest.getAddress().getCity(), memberResponse.getAddress().getCity(), memberResponse.getAddress().getCity());

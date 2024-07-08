@@ -1,6 +1,6 @@
 package com.example.shoppingserver.domain.member.service;
 
-import com.example.shoppingserver.domain.member.code.MemberCodes;
+import com.example.shoppingserver.domain.member.enums.MemberErrorCodes;
 import com.example.shoppingserver.domain.member.dao.DeleteMemberRepository;
 import com.example.shoppingserver.domain.member.dao.MemberRepository;
 import com.example.shoppingserver.domain.member.dto.LoginRequest;
@@ -29,8 +29,8 @@ public class MemberService {
     public LoginResponse login(LoginRequest loginRequest) {
         Member member = memberRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new MyException(
-                        MemberCodes.INCORRECT_MEMBER_INFO.getCode(),
-                        MemberCodes.INCORRECT_MEMBER_INFO.getMessage()));
+                        MemberErrorCodes.INCORRECT_MEMBER_INFO.getCode(),
+                        MemberErrorCodes.INCORRECT_MEMBER_INFO.getMessage()));
 
         if(isMatchPassword(loginRequest.getPassword(), member.getPassword())) {
             System.out.println("test successful");
@@ -39,8 +39,8 @@ public class MemberService {
             System.out.println("test error");
 
             throw new MyException(
-                    MemberCodes.INCORRECT_MEMBER_INFO.getCode(),
-                    MemberCodes.INCORRECT_MEMBER_INFO.getMessage());
+                    MemberErrorCodes.INCORRECT_MEMBER_INFO.getCode(),
+                    MemberErrorCodes.INCORRECT_MEMBER_INFO.getMessage());
         }
     }
 
@@ -61,8 +61,8 @@ public class MemberService {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
                     throw new MyException(
-                            MemberCodes.NOT_EXIST_MEMBER_DATA.getCode(),
-                            MemberCodes.NOT_EXIST_MEMBER_DATA.getMessage()
+                            MemberErrorCodes.NOT_EXIST_MEMBER_DATA.getCode(),
+                            MemberErrorCodes.NOT_EXIST_MEMBER_DATA.getMessage()
                     );
                 });
     }
@@ -71,8 +71,8 @@ public class MemberService {
     public MemberResponse updateMemberInfo(Long memberId, MemberRequest memberRequest) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> {throw new MyException(
-                        MemberCodes.NOT_EXIST_MEMBER_DATA.getCode(),
-                        MemberCodes.NOT_EXIST_MEMBER_DATA.getMessage());
+                        MemberErrorCodes.NOT_EXIST_MEMBER_DATA.getCode(),
+                        MemberErrorCodes.NOT_EXIST_MEMBER_DATA.getMessage());
                 });
 
         member.updateMember(memberRequest);
@@ -84,8 +84,8 @@ public class MemberService {
         memberRepository.findByEmail(email)
                 .ifPresent(member -> {
                     throw new MyException(
-                            MemberCodes.EXIST_MEMBER_EMAIL.getCode(),
-                            MemberCodes.EXIST_MEMBER_EMAIL.getMessage());
+                            MemberErrorCodes.EXIST_MEMBER_EMAIL.getCode(),
+                            MemberErrorCodes.EXIST_MEMBER_EMAIL.getMessage());
                 });
     }
 
