@@ -26,6 +26,7 @@ public class OrderRequest {
 
     public Order toEntity(Member member, List<Item> itemList) {
         Order order = new Order();
+        int sumPrice = 0;
         for(int i = 0; i<orderItemRequestList.size(); i++) {
             OrderItemRequest orderItemRequest = orderItemRequestList.get(i);
             if (itemList.get(i).getStockQuantity() - orderItemRequest.getAmount() < 0) {
@@ -33,12 +34,13 @@ public class OrderRequest {
                         ItemErrorCode.STOCK_QUANTITY_ERROR.getCode(),
                         ItemErrorCode.STOCK_QUANTITY_ERROR.getMessage());
             }
+            sumPrice += itemList.get(i).getPrice();
             itemList.get(i).removeStockQuantity(orderItemRequest.getAmount());
             order.getOrderItems().add(orderItemRequest.toEntity(itemList.get(i),order));
         }
         order.setMember(member);
         order.setOrderStatus(OrderStatus.ORDER);
-
+        order.setSumPrice(sumPrice);
         return order;
 
     }
