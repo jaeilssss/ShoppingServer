@@ -3,7 +3,7 @@ package com.example.shoppingserver.domain.member.controller;
 import com.example.shoppingserver.domain.member.dto.LoginRequest;
 import com.example.shoppingserver.domain.member.dto.MemberRequest;
 import com.example.shoppingserver.domain.member.dto.MemberResponse;
-import com.example.shoppingserver.domain.member.dto.LoginResponse;
+import com.example.shoppingserver.domain.member.dto.TokenResponse;
 import com.example.shoppingserver.domain.member.entity.Address;
 import com.example.shoppingserver.domain.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,13 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -29,7 +25,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -65,11 +60,11 @@ class MemberControllerTest {
     void loginTest() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("test@test.com", "1234");
-        LoginResponse loginResponse = new LoginResponse("someToken");
+        TokenResponse tokenResponse = new TokenResponse("someToken");
         String content = objectMapper.writeValueAsString(loginRequest);
 
         //when
-        when(memberService.login(any(LoginRequest.class))).thenReturn(loginResponse);
+        when(memberService.login(any(LoginRequest.class))).thenReturn(tokenResponse);
 
         // then
         mockMvc.perform(post("/api/member/login")
@@ -86,7 +81,7 @@ class MemberControllerTest {
     void loginTestFail() throws Exception {
         //given
         LoginRequest loginRequest = new LoginRequest("test111@test.com", "1234");
-        LoginResponse loginResponse = new LoginResponse("someToken");
+        TokenResponse tokenResponse = new TokenResponse("someToken");
         String content = objectMapper.writeValueAsString(loginRequest);
 
 //        //when

@@ -1,11 +1,6 @@
 package com.example.shoppingserver.domain.member.controller;
 
-import com.example.shoppingserver.domain.member.dao.DeleteMemberRepository;
-import com.example.shoppingserver.domain.member.dto.LoginRequest;
-import com.example.shoppingserver.domain.member.dto.LoginResponse;
-import com.example.shoppingserver.domain.member.dto.MemberRequest;
-import com.example.shoppingserver.domain.member.dto.MemberResponse;
-import com.example.shoppingserver.domain.member.entity.DeleteMember;
+import com.example.shoppingserver.domain.member.dto.*;
 import com.example.shoppingserver.domain.member.service.MemberService;
 import com.example.shoppingserver.globals.Response;
 import com.example.shoppingserver.globals.base.BaseController;
@@ -23,7 +18,7 @@ public class MemberController extends BaseController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    public Response<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public Response<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
         return new Response<>(
                 ApiResponse.OK,
                 ApiResponse.OK_MESSAGE,
@@ -65,6 +60,15 @@ public class MemberController extends BaseController {
                 ApiResponse.OK,
                 ApiResponse.OK_MESSAGE,
                 null
+        );
+    }
+
+    @PostMapping("/refresh/token")
+    public Response<TokenResponse> refreshToken(@RequestBody RefreshRequest request) {
+        return new Response<>(
+                ApiResponse.OK,
+                ApiResponse.OK_MESSAGE,
+                memberService.renewToken(request)
         );
     }
 }

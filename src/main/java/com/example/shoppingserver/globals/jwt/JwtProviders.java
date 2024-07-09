@@ -1,5 +1,6 @@
 package com.example.shoppingserver.globals.jwt;
 
+import com.example.shoppingserver.domain.member.dto.JWTDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -25,13 +26,16 @@ public class JwtProviders implements InitializingBean {
     public static String AUTHORITIES_KEY ;
     private final String secretKey;
     private final long expirationTime;
+    private final long refreshExpirationTime;
     private Key key;
 
     public JwtProviders(
             @Value("${jwt.secretKey}") String secretKey,
-            @Value("${jwt.expiration}") long expirationTime) {
+            @Value("${jwt.expiration}") long expirationTime,
+            @Value("${jwt.refresh_expiration}") long refreshExpirationTime) {
         this.secretKey = secretKey;
         this.expirationTime = expirationTime;
+        this.refreshExpirationTime = refreshExpirationTime;
     }
 
     @Override
@@ -40,22 +44,31 @@ public class JwtProviders implements InitializingBean {
         key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(String email, Long userId) {
+    public JWTDto createToken(String email, Long userId) {
         Claims claims = Jwts.claims();
 
         claims.put(AUTHORITIES_KEY,email);
 
         long now = new Date().getTime();
-        Date validity = new Date(now + this.expirationTime);
+        Date accessExpiration = new Date(now + this.expirationTime);
+        Date refreshExpiration = new Date(now + this.refreshExpirationTime);
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(validity)
+                .setExpiration(accessExpiration)
                 .setSubject(email)
                 .claim("userId",userId)
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
+        String refreshToken = Jwts.builder()
+                .setExpiration(refreshExpiration)
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+        return JWTDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
     public boolean validateToken(String token) {
