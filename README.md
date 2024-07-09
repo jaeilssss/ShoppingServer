@@ -62,3 +62,48 @@ Access Token에는 email과 userId를 넣어주고 RefreshToken에는 앞선 두
 
 RefreshToken은 말 그대로 AcessToken을 갱신 받기 위해서 쓰는 토큰 임으로 개인 정보를 담지 않고 생성합니다.
 
+### Token 검증 메소드
+
+<pre><code>
+      public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (io.jsonwebtoken.security.SecurityException |
+                 MalformedJwtException e) {
+            log.info("Invalid JWT token", e);
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token", e);
+            throw new JwtException("error");
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT token", e);
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims string is empty", e);
+        }
+        return false;
+    }
+</code></pre>
+
+JwtProviders.class 안에 정의된 메소드 이며 해당 메소드를 통해 Token의 유효성 검사를 실시합니다.
+
+### BaseController 
+
+<pre><code>
+  @RestController
+public class BaseController {
+    @ExceptionHandler(MyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response<Boolean> handleException(MyException e, HttpServletRequest request) {
+        log.error("error code : " + e.getExceptionCode()+ "  error message : "+e.getExceptionMessage());
+        return new Response<>(
+                e.getExceptionCode(),
+                e.getExceptionMessage(),
+                false
+        );
+    }
+}          
+</code></pre>
+
+모든 Controller는 BaseController를 상속 받는다 왜냐하면 BAD_REQUEST 일 경우 일관된 Response를 보내주면서 코드의 중복성을 제거하기 위해서 BaseController를 만들고 상속 받아서 Controller를 구현했습니다.          
+
+
