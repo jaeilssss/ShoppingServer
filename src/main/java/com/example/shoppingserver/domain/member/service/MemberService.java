@@ -1,12 +1,9 @@
 package com.example.shoppingserver.domain.member.service;
 
+import com.example.shoppingserver.domain.member.dto.*;
 import com.example.shoppingserver.domain.member.enums.MemberErrorCodes;
 import com.example.shoppingserver.domain.member.dao.DeleteMemberRepository;
 import com.example.shoppingserver.domain.member.dao.MemberRepository;
-import com.example.shoppingserver.domain.member.dto.LoginRequest;
-import com.example.shoppingserver.domain.member.dto.LoginResponse;
-import com.example.shoppingserver.domain.member.dto.MemberRequest;
-import com.example.shoppingserver.domain.member.dto.MemberResponse;
 import com.example.shoppingserver.domain.member.entity.DeleteMember;
 import com.example.shoppingserver.domain.member.entity.Member;
 import com.example.shoppingserver.globals.exception.MyException;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class MemberService {
 
@@ -26,18 +24,15 @@ public class MemberService {
     private final JwtProviders jwtProviders;
 
     @Transactional
-    public LoginResponse login(LoginRequest loginRequest) {
+    public TokenResponse login(LoginRequest loginRequest) {
         Member member = memberRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new MyException(
                         MemberErrorCodes.INCORRECT_MEMBER_INFO.getCode(),
                         MemberErrorCodes.INCORRECT_MEMBER_INFO.getMessage()));
 
         if(isMatchPassword(loginRequest.getPassword(), member.getPassword())) {
-            System.out.println("test successful");
-            return new LoginResponse(jwtProviders.createToken(loginRequest.getEmail(), member.getMemberId()));
+            return new TokenResponse(jwtProviders.createToken(loginRequest.getEmail(), member.getMemberId()));
         } else {
-            System.out.println("test error");
-
             throw new MyException(
                     MemberErrorCodes.INCORRECT_MEMBER_INFO.getCode(),
                     MemberErrorCodes.INCORRECT_MEMBER_INFO.getMessage());
@@ -98,5 +93,20 @@ public class MemberService {
         Member member = getMember(memberId);
         deleteMemberRepository.save(new DeleteMember().createDeleteMember(member));
         memberRepository.delete(member);
+    }
+
+    public TokenResponse renewToken(RefreshRequest request) {
+        if (checkRefreshToken(request.getRefreshToken())) {
+            Member member = getMember(request.getMemberId());
+            return new TokenResponse(jwtProviders.createToken(member.getEmail(),member.getMemberId()));
+        } else {
+            throw new MyException(
+                    MemberErrorCodes.INVALID_REFRESH_TOKEN.getCode(),
+                    MemberErrorCodes.INVALID_REFRESH_TOKEN.getMessage());
+        }
+    }
+
+    public Boolean checkRefreshToken(String refresh) {
+        return jwtProviders.validateToken(refresh);
     }
 }
