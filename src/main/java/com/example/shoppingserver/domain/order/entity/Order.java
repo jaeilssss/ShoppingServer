@@ -34,13 +34,9 @@ public class Order {
             mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    private String itemName;
     private int sumPrice;
 
     public OrderResponse createOrderResponse() {
-//        orderItems.forEach(it -> System.out.println(it.getItem().getName()));
-/*        System.out.println("----------");
-        System.out.println(orderItems.size());*/
         return OrderResponse.builder()
                 .orderId(orderId)
                 .userName(member.getName())
