@@ -1,6 +1,7 @@
 package com.example.shoppingserver.globals.config;
 
 import com.example.shoppingserver.globals.jwt.JwtAuthenticationFilter;
+import com.example.shoppingserver.globals.jwt.JwtExceptionFilter;
 import com.example.shoppingserver.globals.jwt.JwtProviders;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,13 @@ public class SecurityConfig {
                 .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .rememberMe(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(request -> {
+                    request.requestMatchers("/api/member/login").permitAll();
+                    request.requestMatchers("/api/member/signUp").permitAll();
+                    request.anyRequest().authenticated();
+                })
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProviders), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
                 .build();
     }
 }
