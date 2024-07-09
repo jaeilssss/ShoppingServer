@@ -104,6 +104,6 @@ public class BaseController {
 }          
 </code></pre>
 
-모든 Controller는 BaseController를 상속 받는다 왜냐하면 BAD_REQUEST 일 경우 일관된 Response를 보내주면서 코드의 중복성을 제거하기 위해서 BaseController를 만들고 상속 받아서 Controller를 구현했습니다.          
+BAD_REQUEST 일 경우 일관된 Response를 보내주면서 코드의 중복성을 제거하기 위해서 BaseController에 위에 handleException 메소드를 만들고 상속 받아서 Controller를 구현했습니다.          
 
 
