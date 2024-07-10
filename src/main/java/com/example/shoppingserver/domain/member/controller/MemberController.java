@@ -17,6 +17,10 @@ public class MemberController extends BaseController {
 
     private final MemberService memberService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "success ec2";
+    }
     @PostMapping("/login")
     public Response<TokenResponse> login(@RequestBody LoginRequest loginRequest) {
         return new Response<>(
