@@ -60,7 +60,7 @@ class MemberControllerTest {
     void loginTest() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("test@test.com", "1234");
-        TokenResponse tokenResponse = new TokenResponse("someToken");
+        TokenResponse tokenResponse = new TokenResponse("someToken","someToken");
         String content = objectMapper.writeValueAsString(loginRequest);
 
         //when
@@ -81,7 +81,7 @@ class MemberControllerTest {
     void loginTestFail() throws Exception {
         //given
         LoginRequest loginRequest = new LoginRequest("test111@test.com", "1234");
-        TokenResponse tokenResponse = new TokenResponse("someToken");
+        TokenResponse tokenResponse = new TokenResponse("someToken","someToken");
         String content = objectMapper.writeValueAsString(loginRequest);
 
 //        //when
