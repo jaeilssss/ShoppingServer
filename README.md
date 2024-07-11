@@ -15,6 +15,13 @@
 
 ---------------------------------------
 
+## Project Architecture
+
+<img width="800" alt="Screenshot 2024-07-11 at 9 50 29 PM" src="https://github.com/jaeilssss/ShoppingServer/assets/59818827/ad53feca-3f32-44cb-b7df-78f463c31124">
+
+---------------------------------------
+
+
 ## 엔티티 분석
 
 <img width="779" alt="Screenshot 2024-07-09 at 3 19 33 PM" src="https://github.com/jaeilssss/ShoppingServer/assets/59818827/672e103b-27b9-4126-8934-3e85951a7951">
