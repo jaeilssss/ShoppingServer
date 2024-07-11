@@ -1,15 +1,14 @@
-version: '3'
+version: '3.3'
 
 services:
   mysql:
     container_name: shopping_db
-    image: mysql/mysql-server:8.0.26
+    image: mysql/mysql-server:8.0.23
     environment:
       MYSQL_ROOT_HOST: '%'
       MYSQL_DATABASE: "shopping_db"
       MYSQL_USER: "jaeil"
       MYSQL_PASSWORD: "jaeil"
-      TZ: 'Asia/Seoul'
     ports:
       - "3306:3306"
     command:
