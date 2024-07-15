@@ -19,7 +19,7 @@
 
 ## Jenkins를 활용한 CI/CD 구축
 
-<img width="800" alt="Screenshot 2024-07-15 at 11 38 34 AM" src="https://github.com/user-attachments/assets/8e941685-a646-4d6b-a018-badbb83e7bac">
+<img width="800" alt="Screenshot 2024-07-15 at 10 23 40 PM" src="https://github.com/user-attachments/assets/00844612-c0cc-4f80-bc77-7ef7b1767985">
 
 --------------------------------------
 
