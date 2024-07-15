@@ -17,12 +17,18 @@
 
 ---------------------------------------
 
+## Jenkins를 활용한 CI/CD 구축
+
+<img width="800" alt="Screenshot 2024-07-15 at 11 38 34 AM" src="https://github.com/user-attachments/assets/8e941685-a646-4d6b-a018-badbb83e7bac">
+
+--------------------------------------
+
+
 ## Project Architecture
 
 <img width="800" alt="Screenshot 2024-07-11 at 9 50 29 PM" src="https://github.com/jaeilssss/ShoppingServer/assets/59818827/ad53feca-3f32-44cb-b7df-78f463c31124">
 
----------------------------------------
-
+---
 
 ## 엔티티 분석
 
