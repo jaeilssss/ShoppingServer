@@ -32,7 +32,7 @@
 
 ## 엔티티 분석
 
-<img width="779" alt="Screenshot 2024-07-09 at 3 19 33 PM" src="https://github.com/jaeilssss/ShoppingServer/assets/59818827/672e103b-27b9-4126-8934-3e85951a7951">
+<img width="800" alt="Screenshot 2024-07-16 at 10 51 29 PM" src="https://github.com/user-attachments/assets/335e1ea0-f352-4e3d-bdc3-1794f0c61d90">
 
 ---------------------------------------
 
