@@ -8,9 +8,8 @@
 
 ## 기술 스택
 
-* **Backend** : Spring Boot 3.2.5
+* **Tech** : Spring Boot 3.2.5, Spring data JPA, Spring Security , JWT
 * **Server** : Amazon EC2
-* **Libraries** : Spring data JPA, Spring Security , JWT
 * **Database** : MySql
 * **Language** : Java
 * **ETC** : Jenkins
